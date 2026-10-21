@@ -72,13 +72,13 @@ function Screen({ index }: { index: number }) {
   }
   const onClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
-    if (scrollState.build < 0.99) return
+    if (scrollState.build < T.screens[1]) return
     window.dispatchEvent(new CustomEvent('tcr:open-project', { detail: { index: projectIndex, screen: index } }))
   }
 
   return (
     <group ref={group} visible={false}>
-      <mesh material={mats.black} position={[0, 0, -0.04]} castShadow>
+      <mesh material={mats.black} position={[0, 0, -0.05]} castShadow>
         <boxGeometry args={[SCREEN_W + 0.12, SCREEN_H + 0.12, 0.08]} />
       </mesh>
       <mesh
@@ -98,6 +98,11 @@ function Screen({ index }: { index: number }) {
 }
 
 export function Screens() {
+  const offset = useStore((s) => s.screenOffset)
+  // precarga la siguiente tanda de fotos para que el cambio sea instantáneo
+  useEffect(() => {
+    for (let i = 3; i < 6; i++) useTexture.preload(photo(projects[(offset + i) % projects.length].file, 800))
+  }, [offset])
   return (
     <>
       {[0, 1, 2].map((i) => (

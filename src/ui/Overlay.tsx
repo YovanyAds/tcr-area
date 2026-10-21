@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { scrollState, useStore } from '../store/useStore'
 import { CAMERA_KEYS, CHAPTERS, local } from '../scroll/timeline'
-import { brand, chapters, hotspots } from '../content/site'
+import { brand, chapters, hotspots, projects } from '../content/site'
 import { lenisRef } from '../scroll/lenis'
 import { openHotspot } from './actions'
 import s from './Overlay.module.css'
@@ -102,9 +102,16 @@ export function Overlay() {
           <section key={h.id} ref={set(h.id)} className={`${s.block} ${s.stop}`}>
             <p className={s.kicker}>{h.label}</p>
             <p className={s.teaser}>{h.teaser}</p>
-            <button className={s.open} onClick={() => openHotspot(h.id, 'overlay')}>
-              Ver {h.label.toLowerCase()}
-            </button>
+            <div className={s.actions}>
+              <button className={s.open} onClick={() => openHotspot(h.id, 'overlay')}>
+                Ver {h.label.toLowerCase()}
+              </button>
+              {h.id === 'projects' && (
+                <button className={s.secondary} onClick={() => useStore.getState().set({ screenOffset: (useStore.getState().screenOffset + 3) % projects.length })}>
+                  Otros proyectos en pantalla
+                </button>
+              )}
+            </div>
           </section>
         )
       })}

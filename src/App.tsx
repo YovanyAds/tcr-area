@@ -10,6 +10,7 @@ import { Panel } from './ui/Panel'
 import { HotspotNav } from './ui/HotspotNav'
 import { Cursor } from './ui/Cursor'
 import { Fade } from './ui/Fade'
+import { ProjectViewer } from './ui/ProjectViewer'
 
 const Experience = lazy(() => import('./scene/Experience'))
 
@@ -43,10 +44,11 @@ export default function App() {
       <Overlay />
       <HotspotNav />
       <Panel />
+      <ProjectViewer />
       <Fade />
       <Loader />
       <Cursor />
-      <div id="recorrido" style={{ height: isMobile ? '800vh' : '1000vh', position: 'relative' }} aria-hidden="true" />
+      <div id="recorrido" style={{ height: isMobile ? '800vh' : '1000vh', position: 'relative', pointerEvents: 'none' }} aria-hidden="true" />
     </>
   )
 }

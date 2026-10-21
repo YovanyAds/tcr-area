@@ -8,6 +8,7 @@ import { scrollState, useStore } from '../store/useStore'
 import { CAMERA_KEYS, HOTSPOT_VIEWS } from '../scroll/timeline'
 import { smootherstep } from '../lib/easing'
 import { fit } from './stand/dims'
+import { sceneRefs } from './refs'
 
 const posCurve = new THREE.CatmullRomCurve3(CAMERA_KEYS.map((k) => new THREE.Vector3(...k.pos)), false, 'centripetal')
 const lookCurve = new THREE.CatmullRomCurve3(CAMERA_KEYS.map((k) => new THREE.Vector3(...k.look)), false, 'centripetal')
@@ -54,6 +55,10 @@ export function CameraRig() {
   const mode = useRef<'scroll' | 'hotspot' | 'free'>('scroll')
   /** OrbitControls se monta de nuevo al salir de un hotspot: hay que fijar su objetivo al punto de mira actual */
   const needsInit = useRef(false)
+
+  useEffect(() => {
+    sceneRefs.camera = camera
+  }, [camera])
 
   // FOV más abierto en móvil
   useEffect(() => {
