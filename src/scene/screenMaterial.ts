@@ -38,9 +38,9 @@ export function createScreenMaterial(map: THREE.Texture) {
         vec3 c = texture2D(uMap, uv).rgb;
         float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
         vec3 col = mix(vec3(l), c, uSaturation);
-        // líneas muy finas de panel LED
-        float scan = 0.96 + 0.04 * sin(vUv.y * 900.0);
-        col *= scan;
+        // viñeta suave del panel LED
+        vec2 q = vUv - 0.5;
+        col *= 1.0 - dot(q, q) * 0.35;
         col *= mix(0.04, 1.05, uPower);
         gl_FragColor = vec4(col, 1.0);
         #include <colorspace_fragment>

@@ -6,6 +6,10 @@ import { isMobileDevice, prefersReducedMotion } from './lib/device'
 import { Loader } from './ui/Loader'
 import { Overlay } from './ui/Overlay'
 import { TopBar } from './ui/TopBar'
+import { Panel } from './ui/Panel'
+import { HotspotNav } from './ui/HotspotNav'
+import { Cursor } from './ui/Cursor'
+import { Fade } from './ui/Fade'
 
 const Experience = lazy(() => import('./scene/Experience'))
 
@@ -37,7 +41,11 @@ export default function App() {
       <ScrollDriver />
       <TopBar />
       <Overlay />
+      <HotspotNav />
+      <Panel />
+      <Fade />
       <Loader />
+      <Cursor />
       <div id="recorrido" style={{ height: isMobile ? '800vh' : '1000vh', position: 'relative' }} aria-hidden="true" />
     </>
   )

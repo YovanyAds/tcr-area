@@ -58,7 +58,18 @@ export function ScrollDriver() {
       })
     }
 
+    // el scroll se congela con un panel abierto o en exploración libre
+    const unsub = useStore.subscribe((s, prev) => {
+      const locked = !!s.activeHotspot || s.freeMode
+      const was = !!prev.activeHotspot || prev.freeMode
+      if (locked !== was) {
+        if (locked) lenis.stop()
+        else lenis.start()
+      }
+    })
+
     return () => {
+      unsub()
       st.kill()
       gsap.ticker.remove(raf)
       lenis.destroy()
