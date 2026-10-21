@@ -1,0 +1,19 @@
+:root {
+  --pavilion: #1e2833;
+  --ink: #18212c;
+  --paper: #f2f3f1;
+  --aluminium: #d7dadb;
+  --tape: #f4c20d;
+  --line: #6f8fe6;
+  --muted: #9aa6b4;
+  --panel-bg: rgba(242, 243, 241, 0.97);
+  --overlay-ink: rgba(242, 243, 241, 0.92);
+
+  --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-quote: 'Newsreader', Georgia, serif;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --radius: 4px;
+  --ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --panel-w: min(460px, 40vw);
+}
