@@ -2,7 +2,7 @@ import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Billboard, Html } from '@react-three/drei'
 import * as THREE from 'three'
-import { scrollState, useStore } from '../store/useStore'
+import { useStore } from '../store/useStore'
 import { HOTSPOT_VIEWS } from '../scroll/timeline'
 import { hotspots, type HotspotId } from '../content/site'
 import { PALETTE } from './stand/materials'
@@ -74,7 +74,7 @@ export function Hotspots() {
   const chapter = useStore((s) => s.chapter)
   const freeMode = useStore((s) => s.freeMode)
   const active = useStore((s) => s.activeHotspot)
-  const visible = (chapter === 'interior' || chapter === 'final' || freeMode) && !active && scrollState.build >= 0.99
+  const visible = (chapter === 'interior' || chapter === 'final' || freeMode) && !active
   if (!visible) return null
   return (
     <>

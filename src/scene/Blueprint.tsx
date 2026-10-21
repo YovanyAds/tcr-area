@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { scrollState } from '../store/useStore'
+import { scrollState, useStore } from '../store/useStore'
 import { local, T } from '../scroll/timeline'
 import { PALETTE } from './stand/materials'
 import { RectOutline } from './RectOutline'
@@ -72,11 +72,16 @@ export function Blueprint() {
   )
   const label = useMemo(() => floorLabelTexture(chapters.plano.standLabel.replace('Stand ', ''), chapters.plano.standArea), [])
 
-  useFrame(() => {
+  // la retícula se dibuja sola al terminar la carga (y el scroll la completa si el usuario va más rápido)
+  const intro = useRef<number | null>(null)
+  useFrame(({ clock }) => {
     const p = scrollState.smooth
+    if (intro.current === null && useStore.getState().loaded) intro.current = clock.elapsedTime
+    const auto = intro.current === null ? 0 : Math.min(1, (clock.elapsedTime - intro.current) / 2.8)
+    const autoEased = 1 - Math.pow(1 - auto, 3)
     // R3F copia el objeto de uniforms al material: se actualiza a través del material
     const u = grid.current?.uniforms ?? uniforms
-    u.uReveal.value = local(p, T.grid)
+    u.uReveal.value = Math.max(autoEased, local(p, T.grid), useStore.getState().reducedMotion ? 1 : 0)
     // la retícula se atenúa cuando se encienden las luces
     u.uOpacity.value = 1 - 0.8 * local(p, [0.2, 0.45])
     lineMat.opacity = (1 - 0.7 * local(p, [0.25, 0.45]))

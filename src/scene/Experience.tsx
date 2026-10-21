@@ -39,6 +39,7 @@ export default function Experience() {
       camera={{ fov: 42, position: [0, 52, 0.01], near: 0.1, far: 260 }}
       aria-hidden="true"
       tabIndex={-1}
+      onCreated={() => set({ ready: true })}
     >
       <color attach="background" args={['#0f151c']} />
       <fogExp2 attach="fog" args={['#0f151c', 0.0105]} />

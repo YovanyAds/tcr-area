@@ -5,9 +5,9 @@ import * as THREE from 'three'
 import { scrollState, useStore } from '../../store/useStore'
 import { local, T, type Window } from '../../scroll/timeline'
 import { heavyDrop } from '../../lib/easing'
-import { mats } from './materials'
+import { contrastOn, mats } from './materials'
 import { fit } from './dims'
-import { totemTexture } from '../textures'
+import { counterTexture, totemTexture } from '../textures'
 import { clients } from '../../content/site'
 
 const PLATFORM_H = 0.12
@@ -34,11 +34,15 @@ function Dropped({ win, at, rotY = 0, height = 5, children, enabled = true }: { 
 }
 
 export function Counter() {
+  const color = useStore((s) => s.config.color)
+  const tex = useMemo(() => counterTexture(color, contrastOn(color)), [color])
+  useEffect(() => () => tex.dispose(), [tex])
   return (
     <Dropped win={T.counter} at={[-4.5, 0, 3.5]} rotY={0.25}>
       <RoundedBox args={[2.8, 1.05, 0.8]} radius={0.05} position={[0, 0.525, 0]} material={mats.paper} castShadow receiveShadow />
-      <mesh material={mats.brandWall} position={[0, 0.55, 0.405]}>
-        <boxGeometry args={[2.6, 0.75, 0.01]} />
+      <mesh position={[0, 0.55, 0.406]}>
+        <planeGeometry args={[2.6, 0.75]} />
+        <meshStandardMaterial map={tex} roughness={0.5} emissive="#ffffff" emissiveMap={tex} emissiveIntensity={0.08} />
       </mesh>
       <mesh material={mats.wood} position={[0, 1.07, 0]} castShadow>
         <boxGeometry args={[3.0, 0.04, 0.9]} />
@@ -66,7 +70,7 @@ export function MeetingArea() {
       </mesh>
       {stools.map((a, i) => (
         <group key={i} position={[Math.cos(a) * 0.95, 0, Math.sin(a) * 0.95]}>
-          <mesh material={mats.paper} position={[0, 0.76, 0]} castShadow>
+          <mesh material={mats.carpet} position={[0, 0.76, 0]} castShadow>
             <cylinderGeometry args={[0.19, 0.17, 0.06, 24]} />
           </mesh>
           <mesh material={mats.darkMetal} position={[0, 0.37, 0]}>

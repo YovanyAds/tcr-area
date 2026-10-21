@@ -54,15 +54,15 @@ export const CAMERA_KEYS: CamKey[] = [
   { at: 0.75, pos: [0, 2.1, 1.2], look: [0, 2.3, -5], stop: 'projects' },
   { at: 0.82, pos: [1.2, 2.5, 1.8], look: [5, 1.0, -2.5], stop: 'process' },
   { at: 0.88, pos: [2.6, 1.9, 8.2], look: [6, 1.4, 3], stop: 'clients' },
-  { at: 0.93, pos: [0, 1.6, 4.5], look: [0, 5.1, -0.5], stop: 'about' },
-  { at: 1.0, pos: [-1.2, 1.75, 12.5], look: [-4.5, 1.1, 3.5], stop: 'quote' },
+  { at: 0.93, pos: [1.2, 1.7, 8.6], look: [0, 4.0, -1], stop: 'about' },
+  { at: 1.0, pos: [-0.2, 2.1, 12.8], look: [-2.2, 1.3, 3.5], stop: 'quote' },
 ]
 
 // Encuadre de cada hotspot cuando se abre su panel.
 export const HOTSPOT_VIEWS: Record<HotspotId, { pos: [number, number, number]; look: [number, number, number]; marker: [number, number, number] }> = {
-  about: { pos: [0, 1.8, 6.5], look: [0, 4.6, -0.5], marker: [0, 3.95, 0] },
+  about: { pos: [1.2, 1.7, 8.6], look: [0, 4.0, -1], marker: [0, 4.95, 0.4] },
   services: { pos: [0.2, 2.0, 3.6], look: [-8, 2.1, 0.2], marker: [-7.6, 3.1, 4.0] },
-  projects: { pos: [0, 2.1, 1.6], look: [0, 2.3, -5], marker: [0, 3.65, -4.6] },
+  projects: { pos: [0, 2.1, 1.6], look: [0, 2.3, -5], marker: [1.2, 3.4, -4.5] },
   process: { pos: [1.0, 2.6, 2.2], look: [5, 1.0, -2.5], marker: [5, 1.75, -2.5] },
   clients: { pos: [2.5, 1.9, 8.2], look: [6, 1.4, 3], marker: [6, 2.95, 3] },
   quote: { pos: [-1.6, 1.8, 9.6], look: [-4.5, 1.05, 3.5], marker: [-4.5, 1.7, 3.5] },

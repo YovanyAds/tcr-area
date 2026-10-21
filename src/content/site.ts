@@ -133,11 +133,11 @@ export const contact = {
 }
 
 // Hotspots: cada elemento del stand es una sección de la web.
-export const hotspots: { id: HotspotId; label: string; element: string }[] = [
-  { id: 'about', label: 'Quiénes somos', element: 'Lightbox elevado' },
-  { id: 'services', label: 'Servicios', element: 'Pared gráfica' },
-  { id: 'projects', label: 'Proyectos', element: 'Pantallas de vídeo' },
-  { id: 'process', label: 'Proceso', element: 'Zona de reunión' },
-  { id: 'clients', label: 'Clientes', element: 'Tótem de testimonios' },
-  { id: 'quote', label: 'Presupuesto', element: 'Mostrador de recepción' },
+export const hotspots: { id: HotspotId; label: string; element: string; teaser: string }[] = [
+  { id: 'services', label: 'Servicios', element: 'Pared gráfica', teaser: 'Diseño, construcción y gestión de la feria bajo el mismo techo.' },
+  { id: 'projects', label: 'Proyectos', element: 'Pantallas de vídeo', teaser: 'Stands que ya han pasado por ferias de medio mundo.' },
+  { id: 'process', label: 'Proceso', element: 'Zona de reunión', teaser: 'Seis pasos y un solo interlocutor, del briefing al desmontaje.' },
+  { id: 'clients', label: 'Clientes', element: 'Tótem de testimonios', teaser: 'Camper, Accenture, Iberdrola, Hyundai… y lo que dicen de nosotros.' },
+  { id: 'about', label: 'Quiénes somos', element: 'Lightbox elevado', teaser: 'Durante tres días, un stand es la sede de toda una empresa.' },
+  { id: 'quote', label: 'Presupuesto', element: 'Mostrador de recepción', teaser: 'Cuéntanos tu próxima feria y diseña tu stand.' },
 ]

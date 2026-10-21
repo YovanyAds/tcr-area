@@ -62,6 +62,24 @@ export function lightboxTexture(brand: string) {
   return tex
 }
 
+/** Frontal del mostrador: marca sobre el color de marca. */
+export function counterTexture(brand: string, fg: string) {
+  const { c, ctx, tex } = make(1024, 296)
+  const draw = () => {
+    ctx.fillStyle = brand
+    ctx.fillRect(0, 0, c.width, c.height)
+    ctx.fillStyle = fg
+    setFont(ctx as Ctx, 800, 96, 'expanded')
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('TCR AREA', c.width / 2, c.height / 2 + 4)
+    tex.needsUpdate = true
+  }
+  draw()
+  fontsReady().then(draw)
+  return tex
+}
+
 /** Pared gráfica de servicios. */
 export function wallGraphicTexture(brand: string) {
   const { c, ctx, tex } = make(2048, 1024)

@@ -1,0 +1,43 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  background: var(--pavilion);
+  transition: opacity 0.6s var(--ease), visibility 0.6s;
+}
+.out {
+  opacity: 0;
+  visibility: hidden;
+}
+.inner {
+  width: min(420px, calc(100vw - 48px));
+}
+.brand {
+  font-variation-settings: 'wdth' 125;
+  font-weight: 800;
+  font-size: 22px;
+  margin-bottom: 28px;
+}
+.tape {
+  height: 14px;
+  border: 1px solid rgba(244, 194, 13, 0.35);
+  overflow: hidden;
+}
+.fill {
+  height: 100%;
+  transform-origin: left center;
+  background: repeating-linear-gradient(-45deg, var(--tape) 0 14px, var(--ink) 14px 24px);
+  transition: transform 0.5s var(--ease);
+}
+.text {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--aluminium);
+}
+.text :global(.num) {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--paper);
+}

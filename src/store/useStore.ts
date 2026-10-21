@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { HotspotId } from '../content/site'
+import { isMobileDevice, prefersReducedMotion } from '../lib/device'
 
 export type Chapter = 'plano' | 'montaje' | 'luces' | 'interior' | 'final'
 export type Quality = 'high' | 'low'
@@ -16,7 +17,10 @@ export type StandConfig = {
 }
 
 type State = {
+  /** canvas creado */
   ready: boolean
+  /** loader terminado */
+  loaded: boolean
   chapter: Chapter
   activeHotspot: HotspotId | null
   hoverHotspot: HotspotId | null
@@ -44,14 +48,15 @@ export const defaultConfig: StandConfig = {
 
 export const useStore = create<State>((set) => ({
   ready: false,
+  loaded: false,
   chapter: 'plano',
   activeHotspot: null,
   hoverHotspot: null,
   freeMode: false,
   tourDone: false,
   quality: 'high',
-  isMobile: false,
-  reducedMotion: false,
+  isMobile: isMobileDevice(),
+  reducedMotion: prefersReducedMotion(),
   soundOn: false,
   viewer: null,
   screenOffset: 0,
