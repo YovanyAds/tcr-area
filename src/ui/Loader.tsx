@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useProgress } from '@react-three/drei'
 import { useStore } from '../store/useStore'
-import { fontsReady } from '../scene/textures'
+import { fontsReady } from '../lib/fonts'
 import s from './Loader.module.css'
 
 /** Loader real: progreso de carga de texturas como una cinta de balizamiento que se llena. */
 export function Loader() {
-  const { progress, active, total } = useProgress()
+  const { progress, active, total } = useStore((st) => st.load)
   const sceneReady = useStore((st) => st.ready)
   const [fonts, setFonts] = useState(false)
   const [shown, setShown] = useState(0)

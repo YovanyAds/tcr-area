@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { scrollState, useStore } from '../../store/useStore'
+import { scrollState, useLowQuality, useStore } from '../../store/useStore'
 import { local, T } from '../../scroll/timeline'
 import { heavyDrop, easeOutCubic } from '../../lib/easing'
 import { mats } from './materials'
@@ -16,7 +16,7 @@ const PLATFORM_H = 0.12
 /** Tarima, moqueta y paredes del stand (con la pared gráfica de servicios). */
 export function Shell() {
   const color = useStore((s) => s.config.color)
-  const lowQ = useStore((s) => s.quality === 'low')
+  const lowQ = useLowQuality()
   const platform = useRef<THREE.Mesh>(null)
   const edge = useRef<THREE.Mesh>(null)
   const carpet = useRef<THREE.Mesh>(null)

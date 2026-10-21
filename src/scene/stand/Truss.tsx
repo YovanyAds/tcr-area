@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { scrollState, useStore } from '../../store/useStore'
+import { scrollState, useLowQuality, useStore } from '../../store/useStore'
 import { local, T } from '../../scroll/timeline'
 import { heavyDrop } from '../../lib/easing'
 import { trussGeometry } from './trussGeometry'
@@ -14,7 +14,7 @@ const INSET = 1
 /** Estructura de truss: 4 columnas que suben y 4 vigas que caen y encajan una a una. */
 export function Truss() {
   const size = useStore((s) => s.config.size)
-  const lowQ = useStore((s) => s.quality === 'low')
+  const lowQ = useLowQuality()
   const [tw, td] = SIZE_DIMS[size]
   const lenX = Math.max(1, tw - INSET * 2)
   const lenZ = Math.max(1, td - INSET * 2)

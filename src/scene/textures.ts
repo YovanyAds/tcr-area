@@ -1,25 +1,9 @@
 import * as THREE from 'three'
 import { PALETTE } from './stand/materials'
+import { fontsReady } from '../lib/fonts'
 
 const FONT = 'Archivo, system-ui, sans-serif'
 
-/** Espera a que Archivo esté disponible para dibujar en canvas (con límite de tiempo). */
-export const fontsReady = (() => {
-  let p: Promise<void> | null = null
-  return () => {
-    if (!p) {
-      p = Promise.race([
-        Promise.all([
-          document.fonts.load(`800 100px Archivo`),
-          document.fonts.load(`600 100px Archivo`),
-          document.fonts.load(`italic 400 100px Newsreader`),
-        ]).then(() => undefined),
-        new Promise<void>((r) => setTimeout(r, 2500)),
-      ])
-    }
-    return p
-  }
-})()
 
 const make = (w: number, h: number) => {
   const c = document.createElement('canvas')

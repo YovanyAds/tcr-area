@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { scrollState, useStore } from '../store/useStore'
+import { scrollState, useLowQuality } from '../store/useStore'
 import { local } from '../scroll/timeline'
 import { mats } from './stand/materials'
 import { NEIGHBOURS } from './Blueprint'
@@ -10,7 +10,7 @@ const box = new THREE.BoxGeometry(1, 1, 1)
 
 /** Pabellón ferial de noche: suelo, cubierta con cerchas, luminarias y stands vecinos. */
 export function Pavilion() {
-  const lowQ = useStore((s) => s.quality === 'low')
+  const lowQ = useLowQuality()
   const neighbours = useRef<THREE.Group>(null)
   const roofRef = useRef<THREE.Group>(null)
 

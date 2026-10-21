@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { scrollState, useStore } from '../../store/useStore'
+import { scrollState, useLowQuality, useStore } from '../../store/useStore'
 import { local, T } from '../../scroll/timeline'
 import { heavyDrop } from '../../lib/easing'
 import { mats } from './materials'
@@ -14,7 +14,7 @@ const H = 1.3
 /** Lightbox elevado con "TCR AREA": baja colgado, rebota y se enciende. */
 export function Lightbox() {
   const color = useStore((s) => s.config.color)
-  const lowQ = useStore((s) => s.quality === 'low')
+  const lowQ = useLowQuality()
   const tex = useMemo(() => lightboxTexture(color), [color])
   useEffect(() => () => tex.dispose(), [tex])
   const face = useMemo(() => new THREE.MeshBasicMaterial({ map: tex, toneMapped: false }), [tex])
@@ -36,7 +36,7 @@ export function Lightbox() {
     const on = local(p, T.lightboxOn)
     // parpadeo de arranque de fluorescente
     const flicker = on > 0 && on < 0.6 ? (Math.sin(on * 80) > 0.2 ? 1 : 0.25) : 1
-    const k = 0.07 + on * flicker * 1.9
+    const k = 0.07 + on * flicker * 1.35
     face.color.setScalar(k)
     if (light.current) light.current.intensity = on * flicker * 9
     if (glow.current) glow.current.intensity = on * flicker * 6

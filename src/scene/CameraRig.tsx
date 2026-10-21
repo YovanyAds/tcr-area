@@ -5,7 +5,7 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { scrollState, useStore } from '../store/useStore'
-import { CAMERA_KEYS, HOTSPOT_VIEWS } from '../scroll/timeline'
+import { CAMERA_KEYS, HOTSPOT_VIEWS, local } from '../scroll/timeline'
 import { smootherstep } from '../lib/easing'
 import { fit, SIZE_DIMS } from './stand/dims'
 import { sceneRefs } from './refs'
@@ -84,7 +84,7 @@ export function CameraRig() {
       // encuadre según el tamaño final del stand (el configurador puede cambiarlo con el panel abierto)
       const [tw, td] = SIZE_DIMS[size]
       to = { pos: new THREE.Vector3(...fit(v.pos, tw, td)), look: new THREE.Vector3(...fit(v.look, tw, td)) }
-      if (isMobile) to.pos.lerp(to.look, -0.25)
+      if (isMobile) to.pos.sub(to.look).multiplyScalar(1.45).add(to.look)
     } else if (mode.current === 'hotspot') {
       to = { pos: new THREE.Vector3(), look: new THREE.Vector3() }
       if (freeMode) {
@@ -166,6 +166,11 @@ export function CameraRig() {
     if (mode.current === 'scroll' && !fly.current.active) {
       const p = scrollState.smooth
       sampleCamera(p, goal.pos, goal.look)
+      // móvil (vertical): cámara más abierta, se aleja del punto de mira
+      if (isMobile) {
+        const k = 1.12 + 0.38 * local(p, [0.45, 0.62])
+        goal.pos.sub(goal.look).multiplyScalar(k).add(goal.look)
+      }
       if (reduced) {
         cur.pos.copy(goal.pos)
         cur.look.copy(goal.look)

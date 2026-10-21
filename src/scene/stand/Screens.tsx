@@ -10,6 +10,7 @@ import { mats } from './materials'
 import { standDims } from './dims'
 import { createScreenMaterial } from '../screenMaterial'
 import { photo, projects } from '../../content/site'
+import { sceneRefs } from '../refs'
 
 export const SCREEN_W = 2.4
 export const SCREEN_H = 1.8
@@ -18,8 +19,27 @@ const PLATFORM_H = 0.12
 /** Posición X de cada pantalla según el ancho del stand. */
 const screenX = (i: number) => (i - 1) * Math.min(2.9, standDims.w / 3.4)
 
-/** Mundo → posición de una pantalla (para la transición de "expandir pantalla"). */
+/** Mallas de las pantallas (para la transición de "expandir pantalla"). */
 export const screenRegistry: (THREE.Mesh | null)[] = []
+
+/** Rectángulo en pantalla (px) de una de las pantallas 3D. */
+sceneRefs.screenRect = (index) => {
+  const mesh = screenRegistry[index]
+  const cam = sceneRefs.camera
+  if (!mesh || !cam) return null
+  mesh.updateWorldMatrix(true, false)
+  const pts = [
+    [-SCREEN_W / 2, -SCREEN_H / 2],
+    [SCREEN_W / 2, -SCREEN_H / 2],
+    [SCREEN_W / 2, SCREEN_H / 2],
+    [-SCREEN_W / 2, SCREEN_H / 2],
+  ].map(([x, y]) => new THREE.Vector3(x, y, 0).applyMatrix4(mesh.matrixWorld).project(cam))
+  const xs = pts.map((p) => ((p.x + 1) / 2) * innerWidth)
+  const ys = pts.map((p) => ((1 - p.y) / 2) * innerHeight)
+  const x = Math.min(...xs)
+  const y = Math.min(...ys)
+  return { x, y, w: Math.max(...xs) - x, h: Math.max(...ys) - y }
+}
 
 function Screen({ index }: { index: number }) {
   const offset = useStore((s) => s.screenOffset)

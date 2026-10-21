@@ -1,33 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import * as THREE from 'three'
 import gsap from 'gsap'
 import { useStore } from '../store/useStore'
 import { photo, projects } from '../content/site'
 import { track } from '../lib/track'
-import { sceneRefs } from '../scene/refs'
-import { screenRegistry, SCREEN_H, SCREEN_W } from '../scene/stand/Screens'
+import { sceneRefs, type Rect } from '../scene/refs'
 import s from './ProjectViewer.module.css'
-
-type Rect = { x: number; y: number; w: number; h: number }
-
-/** Rectángulo en pantalla de una de las pantallas 3D del stand. */
-function screenRect(index: number): Rect | null {
-  const mesh = screenRegistry[index]
-  const cam = sceneRefs.camera
-  if (!mesh || !cam) return null
-  mesh.updateWorldMatrix(true, false)
-  const pts = [
-    [-SCREEN_W / 2, -SCREEN_H / 2],
-    [SCREEN_W / 2, -SCREEN_H / 2],
-    [SCREEN_W / 2, SCREEN_H / 2],
-    [-SCREEN_W / 2, SCREEN_H / 2],
-  ].map(([x, y]) => new THREE.Vector3(x, y, 0).applyMatrix4(mesh.matrixWorld).project(cam))
-  const xs = pts.map((p) => ((p.x + 1) / 2) * innerWidth)
-  const ys = pts.map((p) => ((1 - p.y) / 2) * innerHeight)
-  const x = Math.min(...xs)
-  const y = Math.min(...ys)
-  return { x, y, w: Math.max(...xs) - x, h: Math.max(...ys) - y }
-}
 
 /** Visor de proyecto a pantalla completa: la pantalla (o la miniatura) se expande hasta llenar la vista. */
 export function ProjectViewer() {
@@ -49,7 +26,7 @@ export function ProjectViewer() {
       if (el) {
         const r = el.getBoundingClientRect()
         origin.current = { x: r.left, y: r.top, w: r.width, h: r.height }
-      } else if (screen !== undefined) origin.current = screenRect(screen)
+      } else if (screen !== undefined) origin.current = sceneRefs.screenRect?.(screen) ?? null
       else origin.current = null
       track('project_open', { proyecto: projects[i].name, categoria: projects[i].category, origen: el ? 'galeria' : 'pantalla' })
       setHiRes(false)

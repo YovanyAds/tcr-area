@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { scrollState, useStore } from '../../store/useStore'
+import { scrollState, useLowQuality } from '../../store/useStore'
 import { local, T } from '../../scroll/timeline'
 import { mats } from './materials'
 import { standDims } from './dims'
@@ -130,7 +130,7 @@ function Spot({ def, index, castShadow, withLight }: { def: SpotDef; index: numb
 
 /** Focos del truss: se encienden uno a uno. En calidad baja, menos luces reales y sin sombras. */
 export function Spots() {
-  const lowQ = useStore((s) => s.quality === 'low')
+  const lowQ = useLowQuality()
   return (
     <>
       {SPOTS.map((def, i) => (

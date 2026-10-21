@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { PerformanceMonitor, AdaptiveDpr } from '@react-three/drei'
+import { PerformanceMonitor, AdaptiveDpr, useProgress } from '@react-three/drei'
+import { useEffect } from 'react'
 import * as THREE from 'three'
 import { scrollState, useStore } from '../store/useStore'
 import { Pavilion } from './Pavilion'
@@ -27,6 +28,20 @@ function ProgressDamper() {
   return null
 }
 
+/** Publica el progreso de carga de texturas para el loader (que vive fuera del bundle 3D). */
+function ProgressReporter() {
+  // suscripción fuera del render (el gestor de carga emite mientras otros componentes renderizan)
+  useEffect(() => {
+    const push = () => {
+      const { active, progress, total } = useProgress.getState()
+      queueMicrotask(() => useStore.getState().set({ load: { active, progress, total } }))
+    }
+    push()
+    return useProgress.subscribe(push)
+  }, [])
+  return null
+}
+
 export default function Experience() {
   const quality = useStore((s) => s.quality)
   const isMobile = useStore((s) => s.isMobile)
@@ -37,7 +52,7 @@ export default function Experience() {
     <Canvas
       className="scene"
       shadows={high}
-      dpr={isMobile ? [1, 1.5] : [1, 1.75]}
+      dpr={isMobile || quality === 'low' ? [1, 1.5] : [1, 1.75]}
       gl={{ antialias: !high, powerPreference: 'high-performance', toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
       camera={{ fov: 42, position: [0, 52, 0.01], near: 0.1, far: 260 }}
       aria-hidden="true"
@@ -49,10 +64,15 @@ export default function Experience() {
       <PerformanceMonitor
         flipflops={2}
         onDecline={() => set({ quality: 'low' })}
-        onFallback={() => set({ quality: 'low' })}
+        onFallback={() => {
+          // si ni en calidad baja llega a los fps en móvil, pasamos a la versión 2D
+          if (useStore.getState().quality === 'low' && useStore.getState().isMobile) set({ mode2d: true })
+          else set({ quality: 'low' })
+        }}
       />
       <AdaptiveDpr pixelated={false} />
       <ProgressDamper />
+      <ProgressReporter />
       <CameraRig />
       <Lights />
       <Pavilion />

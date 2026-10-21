@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
-import { scrollState, useStore } from '../../store/useStore'
+import { scrollState, useLowQuality, useStore } from '../../store/useStore'
 import { local, T, type Window } from '../../scroll/timeline'
 import { heavyDrop } from '../../lib/easing'
 import { contrastOn, mats } from './materials'
@@ -120,7 +120,7 @@ function Plant({ s = 1 }: { s?: number }) {
 }
 
 export function Plants() {
-  const lowQ = useStore((s) => s.quality === 'low')
+  const lowQ = useLowQuality()
   const spots: { at: [number, number, number]; s: number }[] = [
     { at: [-7.2, 0, -4.2], s: 1.1 },
     { at: [7.3, 0, 4.4], s: 0.9 },

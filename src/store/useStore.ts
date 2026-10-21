@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import type { HotspotId } from '../content/site'
-import { isMobileDevice, prefersReducedMotion } from '../lib/device'
+import { isMobileDevice, isVeryLowEnd, prefersReducedMotion } from '../lib/device'
 
 export type Chapter = 'plano' | 'montaje' | 'luces' | 'interior' | 'final'
 export type Quality = 'high' | 'low'
@@ -21,6 +21,8 @@ type State = {
   ready: boolean
   /** loader terminado */
   loaded: boolean
+  /** progreso de carga de texturas (lo publica la escena) */
+  load: { active: boolean; progress: number; total: number }
   chapter: Chapter
   activeHotspot: HotspotId | null
   hoverHotspot: HotspotId | null
@@ -28,6 +30,8 @@ type State = {
   tourDone: boolean
   quality: Quality
   isMobile: boolean
+  /** versión 2D (sin WebGL o dispositivo muy lento) */
+  mode2d: boolean
   reducedMotion: boolean
   soundOn: boolean
   viewer: number | null
@@ -53,6 +57,7 @@ export const defaultConfig: StandConfig = {
 export const useStore = create<State>((set) => ({
   ready: false,
   loaded: false,
+  load: { active: false, progress: 0, total: 0 },
   chapter: 'plano',
   activeHotspot: null,
   hoverHotspot: null,
@@ -60,6 +65,7 @@ export const useStore = create<State>((set) => ({
   tourDone: false,
   quality: 'high',
   isMobile: isMobileDevice(),
+  mode2d: isVeryLowEnd(),
   reducedMotion: prefersReducedMotion(),
   soundOn: false,
   viewer: null,
@@ -80,3 +86,6 @@ export const scrollState = {
   /** progreso del montaje (1 = stand montado; forzado a 1 con movimiento reducido) */
   build: 1,
 }
+
+/** Calidad baja: móvil o dispositivo que no llega a los fps (sin sombras, sin postprocesado, menos luces y piezas). */
+export const useLowQuality = () => useStore((s) => s.quality === 'low' || s.isMobile)
