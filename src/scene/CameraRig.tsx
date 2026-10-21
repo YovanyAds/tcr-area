@@ -7,7 +7,7 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { scrollState, useStore } from '../store/useStore'
 import { CAMERA_KEYS, HOTSPOT_VIEWS } from '../scroll/timeline'
 import { smootherstep } from '../lib/easing'
-import { fit } from './stand/dims'
+import { fit, SIZE_DIMS } from './stand/dims'
 import { sceneRefs } from './refs'
 
 const posCurve = new THREE.CatmullRomCurve3(CAMERA_KEYS.map((k) => new THREE.Vector3(...k.pos)), false, 'centripetal')
@@ -41,11 +41,12 @@ export const sampleCamera = (p: number, pos: THREE.Vector3, look: THREE.Vector3)
 /** Cámara: sigue la curva con el scroll, vuela a los hotspots y permite la exploración libre. */
 export function CameraRig() {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
-  const size = useThree((s) => s.size)
+  const viewport = useThree((s) => s.size)
   const activeHotspot = useStore((s) => s.activeHotspot)
   const freeMode = useStore((s) => s.freeMode)
   const isMobile = useStore((s) => s.isMobile)
   const reduced = useStore((s) => s.reducedMotion)
+  const size = useStore((s) => s.config.size)
   const controls = useRef<OrbitControlsImpl>(null)
 
   const cur = useMemo(() => ({ pos: new THREE.Vector3(...CAMERA_KEYS[0].pos), look: new THREE.Vector3() }), [])
@@ -80,7 +81,9 @@ export function CameraRig() {
     if (activeHotspot) {
       mode.current = 'hotspot'
       const v = HOTSPOT_VIEWS[activeHotspot]
-      to = { pos: new THREE.Vector3(...fit(v.pos)), look: new THREE.Vector3(...fit(v.look)) }
+      // encuadre según el tamaño final del stand (el configurador puede cambiarlo con el panel abierto)
+      const [tw, td] = SIZE_DIMS[size]
+      to = { pos: new THREE.Vector3(...fit(v.pos, tw, td)), look: new THREE.Vector3(...fit(v.look, tw, td)) }
       if (isMobile) to.pos.lerp(to.look, -0.25)
     } else if (mode.current === 'hotspot') {
       to = { pos: new THREE.Vector3(), look: new THREE.Vector3() }
@@ -93,7 +96,7 @@ export function CameraRig() {
       mode.current = freeMode ? 'free' : 'scroll'
       return
     }
-    const target = activeHotspot ? (isMobile ? 0 : Math.min(460, size.width * 0.4)) : 0
+    const target = activeHotspot ? (isMobile ? 0 : Math.min(460, viewport.width * 0.4)) : 0
     if (reduced) {
       fadeCut(() => {
         cur.pos.copy(to.pos)
@@ -123,7 +126,7 @@ export function CameraRig() {
       },
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeHotspot])
+  }, [activeHotspot, size])
 
   // Entrar/salir del modo libre
   useEffect(() => {
@@ -137,7 +140,7 @@ export function CameraRig() {
   useFrame(({ clock }, dt) => {
     // desplazamiento de la vista para dejar el objeto centrado en el hueco libre junto al panel
     const off = panel.current.offset
-    if (off > 0.5) camera.setViewOffset(size.width + off, size.height, off, 0, size.width, size.height)
+    if (off > 0.5) camera.setViewOffset(viewport.width + off, viewport.height, off, 0, viewport.width, viewport.height)
     else if (camera.view?.enabled) camera.clearViewOffset()
 
     if (mode.current === 'free' && !fly.current.active) {

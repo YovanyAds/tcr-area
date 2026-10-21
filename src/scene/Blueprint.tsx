@@ -83,10 +83,11 @@ export function Blueprint() {
     const u = grid.current?.uniforms ?? uniforms
     u.uReveal.value = Math.max(autoEased, local(p, T.grid), useStore.getState().reducedMotion ? 1 : 0)
     // la retícula se atenúa cuando se encienden las luces
-    u.uOpacity.value = 1 - 0.8 * local(p, [0.2, 0.45])
-    lineMat.opacity = (1 - 0.7 * local(p, [0.25, 0.45]))
+    const b = scrollState.build
+    u.uOpacity.value = 1 - 0.8 * local(b, [0.2, 0.45])
+    lineMat.opacity = 1 - 0.7 * local(b, [0.25, 0.45])
     // la cinta se retira al final del montaje
-    tapeMat.opacity = 1 - local(p, [0.3, 0.36])
+    tapeMat.opacity = 1 - local(b, [0.3, 0.36])
     if (labelMat.current) labelMat.current.opacity = local(p, [0.11, 0.14]) * (1 - local(p, [0.17, 0.2]))
   })
 

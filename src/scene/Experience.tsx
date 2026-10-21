@@ -18,8 +18,11 @@ function ProgressDamper() {
     const target = scrollState.progress
     scrollState.smooth = s.reducedMotion ? target : THREE.MathUtils.damp(scrollState.smooth, target, 7, Math.min(dt, 0.1))
     if (Math.abs(scrollState.smooth - target) < 0.00005) scrollState.smooth = target
-    // con movimiento reducido o en exploración libre el stand ya está montado
-    scrollState.build = s.reducedMotion || s.freeMode ? 1 : scrollState.smooth
+    // con movimiento reducido, en exploración libre o con un panel abierto el stand está montado:
+    // si el visitante abre una sección a mitad del montaje, el stand termina de montarse solo
+    if (s.reducedMotion) scrollState.build = 1
+    else if (s.freeMode || s.activeHotspot) scrollState.build = Math.min(1, scrollState.build + Math.min(dt, 0.1) * 0.45)
+    else scrollState.build = scrollState.build > scrollState.smooth + 0.002 ? THREE.MathUtils.damp(scrollState.build, scrollState.smooth, 3, Math.min(dt, 0.1)) : scrollState.smooth
   }, -1)
   return null
 }

@@ -52,7 +52,22 @@
   overscroll-behavior: contain;
   padding: 28px 28px 48px;
 }
+.peekBtn {
+  cursor: pointer;
+  border: 0;
+  margin-left: auto;
+  background: rgba(24, 33, 44, 0.08);
+  color: var(--ink);
+  border-radius: var(--radius);
+  min-height: 44px;
+  padding: 10px 12px;
+  font-weight: 700;
+  font-size: 14px;
+}
 @media (max-width: 820px) {
+  .open.peek {
+    transform: translate3d(0, calc(100% - 64px), 0);
+  }
   .panel {
     width: 100vw;
     transform: translate3d(0, 102%, 0);
@@ -60,6 +75,7 @@
   .open {
     transform: none;
     transition-delay: 0s;
+    transition-duration: 0.6s;
   }
   .head {
     padding: 12px 16px;

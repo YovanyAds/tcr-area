@@ -36,12 +36,16 @@ function Body({ id }: { id: HotspotId }) {
 export function Panel() {
   const active = useStore((st) => st.activeHotspot)
   const viewer = useStore((st) => st.viewer)
+  const peek = useStore((st) => st.peek)
+  const isMobile = useStore((st) => st.isMobile)
+  const set = useStore((st) => st.set)
   const ref = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
   const lastFocus = useRef<HTMLElement | null>(null)
   const label = hotspots.find((h) => h.id === active)?.label
 
   useEffect(() => {
+    set({ peek: false })
     if (!active) {
       lastFocus.current?.focus?.()
       return
@@ -50,7 +54,7 @@ export function Panel() {
     scroller.current?.scrollTo(0, 0)
     const t = setTimeout(() => ref.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus(), 60)
     return () => clearTimeout(t)
-  }, [active])
+  }, [active, set])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -81,7 +85,7 @@ export function Panel() {
   return (
     <div
       ref={ref}
-      className={`${s.panel} ${active ? s.open : ''}`}
+      className={`${s.panel} ${active ? s.open : ''} ${peek ? s.peek : ''}`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="panel-title"
@@ -91,6 +95,11 @@ export function Panel() {
     >
       <div className={s.head}>
         <span className={s.section}>{label}</span>
+        {isMobile && active === 'quote' && (
+          <button className={s.peekBtn} onClick={() => set({ peek: !peek })} aria-pressed={peek}>
+            {peek ? 'Ver formulario' : 'Ver mi stand'}
+          </button>
+        )}
         <button className={s.back} onClick={closeHotspot} data-autofocus>
           Volver al stand
         </button>

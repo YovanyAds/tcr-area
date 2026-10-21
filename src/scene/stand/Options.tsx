@@ -88,14 +88,14 @@ export function DesignRibbon() {
     const pts: THREE.Vector3[] = []
     for (let i = 0; i <= 64; i++) {
       const a = (i / 64) * Math.PI * 2
-      pts.push(new THREE.Vector3(Math.cos(a) * 6.6, 4.4 + Math.sin(a * 3) * 0.35, Math.sin(a) * 3.8))
+      pts.push(new THREE.Vector3(Math.cos(a) * 6.6, 4.7 + Math.sin(a * 3) * 0.3, Math.sin(a) * 3.8))
     }
     const curve = new THREE.CatmullRomCurve3(pts, true)
     const shape = new THREE.Shape()
-    shape.moveTo(-0.05, -0.45)
-    shape.lineTo(0.05, -0.45)
-    shape.lineTo(0.05, 0.45)
-    shape.lineTo(-0.05, 0.45)
+    shape.moveTo(-0.04, -0.28)
+    shape.lineTo(0.04, -0.28)
+    shape.lineTo(0.04, 0.28)
+    shape.lineTo(-0.04, 0.28)
     return new THREE.ExtrudeGeometry(shape, { steps: 200, bevelEnabled: false, extrudePath: curve })
   }, [])
   const inner = useRef<THREE.Group>(null)

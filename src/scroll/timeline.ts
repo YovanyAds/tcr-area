@@ -65,5 +65,6 @@ export const HOTSPOT_VIEWS: Record<HotspotId, { pos: [number, number, number]; l
   projects: { pos: [0, 2.1, 1.6], look: [0, 2.3, -5], marker: [1.2, 3.4, -4.5] },
   process: { pos: [1.0, 2.6, 2.2], look: [5, 1.0, -2.5], marker: [5, 1.75, -2.5] },
   clients: { pos: [2.5, 1.9, 8.2], look: [6, 1.4, 3], marker: [6, 2.95, 3] },
-  quote: { pos: [-1.6, 1.8, 9.6], look: [-4.5, 1.05, 3.5], marker: [-4.5, 1.7, 3.5] },
+  // presupuesto: plano general con el mostrador en primer plano, para ver los cambios del configurador
+  quote: { pos: [-9.5, 6.2, 19.5], look: [0.5, 1.4, 0], marker: [-4.5, 1.7, 3.5] },
 }

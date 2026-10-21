@@ -33,6 +33,10 @@ type State = {
   viewer: number | null
   screenOffset: number
   config: StandConfig
+  /** el visitante ha tocado el configurador */
+  configTouched: boolean
+  /** móvil: panel recogido para ver el stand */
+  peek: boolean
   set: (p: Partial<State>) => void
   setConfig: (p: Partial<StandConfig>) => void
 }
@@ -61,6 +65,8 @@ export const useStore = create<State>((set) => ({
   viewer: null,
   screenOffset: 0,
   config: defaultConfig,
+  configTouched: false,
+  peek: false,
   set: (p) => set(p),
   setConfig: (p) => set((s) => ({ config: { ...s.config, ...p } })),
 }))
